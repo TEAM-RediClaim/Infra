@@ -34,3 +34,8 @@ virt-install \
   --extra-args "inst.text console=ttyS0,115200n8" \
   --network network=k3snat,model=virtio \
   --graphics none
+
+### 호스트의 터미널 사이즈와 통일
+### k3s-kvm
+echo "export TERM=xterm-256color" >> ~/.bashrc
+source ~/.bashrc
