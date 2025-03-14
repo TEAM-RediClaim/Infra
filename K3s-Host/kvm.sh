@@ -10,11 +10,18 @@ ls
 
 ### KVM 관련 패키지 설치
 dnf -y install qemu-kvm libvirt libvirt-daemon libvirt-client virt-install virt-viewer virt-manager
+sudo systemctl enable libvirtd --now
+
 
 ### 호스트 정보 확인
 df -h
 free -h
 grep -c processor /proc/cpuinfo
+
+### libvirt network 정의
+virsh net-define ./k3snat.xml
+virsh net-autostart k3snat
+virsh net-start k3snat
 
 ### k3s-libvirt 이미지 생성
 virt-install \
