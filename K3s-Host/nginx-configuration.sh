@@ -2,12 +2,22 @@
 sudo dnf install -y nginx
 sudo systemctl enable --now nginx
 
-# nginx reverse proxy
+### SELinux Configuration
+sudo semanage port -a -t http_port_t -p tcp 32000
+sudo setsebool -P httpd_can_network_connect 1
+
+### Firewall Configuration
+sudo firewall-cmd --add-service=http --permanent
+sudo firewall-cmd --add-service=https --permanent
+sudo firewall-cmd --zone=public --add-port=32000/tcp --permanent
+sudo firewall-cmd --reload
+
+### Nginx Proxy
 vim /etc/nginx/conf.d/k3s-grafana.conf
 : << "END"
 server {
     listen 32000;
-    server_name k3s-host;
+    server_name _;
 
     location / {
         proxy_pass http://45.120.120.113:32000;
@@ -30,7 +40,4 @@ server {
 }
 END
 
-# firewall configuration
-sudo firewall-cmd --add-service=http --permanent
-sudo firewall-cmd --add-service=https --permanent
-sudo firewall-cmd --reload
+### Iptables Rule

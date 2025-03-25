@@ -18,7 +18,9 @@ helm install prometheus-stack prometheus-community/kube-prometheus-stack \
   --set grafana.service.nodePort=32000
 
 ### Grafana Secret
-kubectl --namespace monitoring get secrets prometheus-stack-grafana -o jsonpath="{.data.admin-password}" | base64 -d ; echo
+kubectl get secret prometheus-stack-grafana \
+  -n monitoring \
+  -o jsonpath="{.data.admin-password}" | base64 -d && echo
 
 : << "END"
 [root@k3s ~]# curl localhost:32000
