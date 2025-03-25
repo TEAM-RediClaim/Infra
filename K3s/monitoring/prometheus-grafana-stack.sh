@@ -26,3 +26,4 @@ kubectl get secret prometheus-stack-grafana \
 [root@k3s ~]# curl localhost:32000
 <a href="/login">Found</a>.
 END
+
