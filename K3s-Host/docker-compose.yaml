@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  mysql-live:
+    image: mysql:latest
+    container_name: mysql-rediclaim
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: rediclaim_db
+      MYSQL_USER: rediclaim-user
+      MYSQL_PASSWORD: 2Cn876LfknKDldA
+    ports:
+      - "3336:3336"
+    volumes:
+      - ./mysql-rediclaim-db:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    restart: alway
