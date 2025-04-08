@@ -60,9 +60,9 @@ spec:
             - name: MYSQL_ROOT_HOST # 루트 계정을 원격 접속 허용하려면 MYSQL_ROOT_HOST=%를 추가
               value: "%"
             - name: MYSQL_DATABASE
-              value: active_db
+              value: rediclaim_db
             - name: MYSQL_USER
-              value: active_user
+              value: rediclaim_user
             - name: MYSQL_PASSWORD
               value: _
           resources:
