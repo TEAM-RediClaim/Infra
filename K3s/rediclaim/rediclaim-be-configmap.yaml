@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coupon-backend-config
+data:
+  application.yaml: |-
+    spring:
+      datasource:
+        name: rediclaim_db
+        url: jdbc:mysql://mysql-rediclaim-service:3306/rediclaim_db?allowPublicKeyRetrieval=true
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        username: root
+        password: _
+      jpa:
+        hibernate:
+          ddl-auto: update
+        database: mysql
+        open-in-view: false
+
+    server:
+      port: 8080
+
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: '*'
+          base-path: /actuator
+      endpoint:
+        health:
+          show-details: always
