@@ -1,0 +1,44 @@
+# react-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-sample-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react-sample-app
+  template:
+    metadata:
+      labels:
+        app: react-sample-app
+    spec:
+      containers:
+      - name: react-sample-app
+        image: paulbouwer/hello-kubernetes:1.10
+        ports:
+          - containerPort: 8080 # 내부 포트
+        resources:
+          requests:
+            cpu: 100m # 0.1 vCPU
+            memory: 128Mi
+          limits:
+            cpu: 200m # 0.2  vCPU
+            memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-sample-app
+  labels:
+    app: react-sample-app
+spec:
+  type: NodePort
+  selector:
+    app: react-sample-app
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80          # 클러스터 내부 접근용
+      targetPort: 8080  # 컨테이너 내부 포트
+      nodePort: 30001   # 외부 노출 포트
