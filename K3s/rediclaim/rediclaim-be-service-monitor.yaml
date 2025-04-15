@@ -21,6 +21,6 @@ spec:
   # SVC 포트 8080 -> 30002 으로 포트포워딩
   endpoints:
     - port: port8080
-      # base-path: /actuator에 맞추어 변경
-      path: /actuator
+      # base-path: /actuator/prometheus에 맞추어 변경
+      path: /actuator/prometheus
       interval: 30s
