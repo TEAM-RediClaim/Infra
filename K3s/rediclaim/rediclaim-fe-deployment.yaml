@@ -1,44 +1,55 @@
-# react-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: react-sample-app
+  name: judemin-coupon-frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: react-sample-app
+      app: judemin-coupon-frontend
   template:
     metadata:
       labels:
-        app: react-sample-app
+        app: judemin-coupon-frontend
     spec:
       containers:
-      - name: react-sample-app
-        image: paulbouwer/hello-kubernetes:1.10
+      - name: judemin-coupon-frontend
+        image: judemin/coupon-frontend:latest
         ports:
-          - containerPort: 8080 # 내부 포트
+          - containerPort: 80
+        envFrom:
+          - configMapRef:
+              name: coupon-frontend-env
         resources:
           requests:
-            cpu: 100m # 0.1 vCPU
+            cpu: 100m
             memory: 128Mi
           limits:
-            cpu: 200m # 0.2  vCPU
+            cpu: 200m
             memory: 128Mi
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: react-sample-app
+  name: judemin-coupon-frontend
   labels:
-    app: react-sample-app
+    app: judemin-coupon-frontend
 spec:
   type: NodePort
   selector:
-    app: react-sample-app
+    app: judemin-coupon-frontend
   ports:
     - name: http
       protocol: TCP
-      port: 80          # 클러스터 내부 접근용
-      targetPort: 8080  # 컨테이너 내부 포트
-      nodePort: 30001   # 외부 노출 포트
+      port: 80
+      targetPort: 80
+      nodePort: 30001
+---
+#  k run -it --rm busybox --image=busybox --restart=Never -- sh \
+#  -c "wget -qO- http://jayon0927-coupon-backend:8080/actuator/health"
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coupon-frontend-env
+data:
+  REACT_APP_API_BASE: ""
