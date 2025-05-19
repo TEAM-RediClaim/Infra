@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-min
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      # Redis
+      - name: redis
+        image: redis:7.2-alpine
+        command: ["redis-server",
+                  "--maxmemory", "120mb",
+                  "--maxmemory-policy", "allkeys-lfu"]
+        ports:
+          - name: redis
+            containerPort: 6379
+        resources:
+          requests: { cpu: 50m, memory: 64Mi }
+          limits:   { cpu: 200m, memory: 128Mi }
+
+      # redis‑exporter
+      - name: redis-exporter
+        image: bitnami/redis-exporter:1.62.0
+        env:
+          - name: REDIS_ADDR
+            value: "redis://localhost:6379"
+        ports:
+          - name: metrics
+            containerPort: 9121
+        resources:
+          requests: { cpu: 10m, memory: 24Mi }
+          limits:   { cpu: 50m, memory: 64Mi }
+---
+# 내부 통신 + Prometheus Scrape용 Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-min
+  labels:
+    app: redis
+spec:
+  type: ClusterIP
+  selector:
+    app: redis
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: redis
+    - name: metrics
+      port: 9121
+      targetPort: metrics
+---
+# 외부 노출용 NodePort Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-min-nodeport
+  labels:
+    app: redis
+spec:
+  type: NodePort
+  selector:
+    app: redis
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: redis
+      nodePort: 30197
+---
+# Prometheus ServiceMonitor
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: redis-min-sm
+  namespace: monitoring
+  labels:
+    release: prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  namespaceSelector:
+    matchNames:
+      - default
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 30s
+      scrapeTimeout: 10s

@@ -2,12 +2,14 @@
 <table>
   <tr>
     <td>
-    Scenario 1 (Redis K3s Deployment)  
-    <img src="https://github.com/user-attachments/assets/7f5a8582-69ce-46c9-9b6e-aa460f92b13a" width="100%"/>
+    Architecture Design
+    <img src="https://github.com/user-attachments/assets/b96878f1-5b16-41cc-a69d-d3a8ba6841e6" width="100%"/>
     </td>
+  </tr>
+  <tr>
     <td>
-    Scenario 2 (Preinstalled Redis Image)  
-    <img src="https://github.com/user-attachments/assets/d63d7a7c-496a-4f98-be75-5e93d119daad" width="100%"/>
+    Module based SW Architecture Design 
+    <img src="https://github.com/user-attachments/assets/ce668f1c-1a47-4077-a494-3fee42402edc" width="100%"/>
     </td>
   </tr>
 </table>
