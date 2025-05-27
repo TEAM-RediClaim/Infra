@@ -11,21 +11,26 @@ data:
         driver-class-name: com.mysql.cj.jdbc.Driver
         username: root
         password: _
+
       jpa:
         hibernate:
           ddl-auto: update
         database: mysql
         open-in-view: false
 
-    server:
-      port: 8080
+    data:
+      redis:
+        host: redis-min
+        port: 6379
 
-    management:
-      endpoints:
-        web:
-          exposure:
-            include: '*'
-          base-path: /actuator
-      endpoint:
-        health:
-          show-details: always
+      kafka:
+        # Kafka FQDN(Fully Qualified Domain Name)
+        # CLIENT가 아니라 INTERNAL 주소를 사용
+        bootstrap-servers: kafka-broker-headless.kafka.svc.cluster.local:9094
+        producer:
+          value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+        consumer:
+          group-id: coupon-backend-group
+          value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+          properties:
+            spring.json.trusted.packages: "rediclaim.couponbackend.*"

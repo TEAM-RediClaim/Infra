@@ -15,6 +15,11 @@ spec:
       containers:
       - name: jayon0927-coupon-backend
         image: jayon0927/coupon-backend
+        # Deployment env 섹션에 강제 JSON 삽입
+        env:
+        - name: SPRING_APPLICATION_JSON
+          value: |
+            {"spring.kafka.bootstrap-servers":"kafka-broker-headless.kafka.svc.cluster.local:9094"}
         ports:
         - containerPort: 8080
         resources:
