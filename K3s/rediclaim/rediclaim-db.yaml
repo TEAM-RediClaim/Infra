@@ -79,10 +79,10 @@ spec:
               value: _
           resources:
             limits:
-              memory: "512Mi"
+              memory: "768Mi"
               cpu: "500m"
             requests:
-              memory: "256Mi"
+              memory: "512Mi"
               cpu: "250m"
           volumeMounts:
             - name: mysql-rediclaim-data
